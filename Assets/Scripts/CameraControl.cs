@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class CameraControl : MonoBehaviour
 {
+    [SerializeField] private Transform _playerModel;
     [SerializeField] private Transform _occlusionPivot;
     [SerializeField] private float _rotationVelocityFactor;
     [SerializeField] private float _maxPitchUpAngle;
@@ -16,12 +17,15 @@ public class CameraControl : MonoBehaviour
     [SerializeField] private float _maxZoomDistance;
     [SerializeField] private float _deocclusionBuffer;
     [SerializeField] private float _deocclusionVelocity;
+    [SerializeField] private float _shootRange;
 
     private Transform _cameraTransform;
     private float _zoomAcceleration;
     private float _zoomVelocity;
     private float _zoomPosition;
     private Vector3 _deocclusionVector;
+    private Vector3 _pointTarget;
+    private Vector3 _cameraBeforeAim;
 
     void Start()
     {
@@ -58,19 +62,32 @@ public class CameraControl : MonoBehaviour
 
     private void UpdateYaw()
     {
-        if (Input.GetMouseButton(1))
+        _cameraBeforeAim = transform.localEulerAngles;
+
+        if (Input.GetMouseButton(1)) //1st was resetYaw
         {
-            Vector3 rotation = transform.localEulerAngles;
-
-            rotation.y += Input.GetAxis("Mouse X") * _rotationVelocityFactor;
-
-            transform.localEulerAngles = rotation;
-
+            ////////////////////////////////////// not yet able to change the camera correctly
+            //ResetYaw();
+            RotateToCrosshair();
         }
         else
         {
-            ResetYaw();
+            Vector3 rotation = transform.localEulerAngles;
+            rotation.y += Input.GetAxis("Mouse X") * _rotationVelocityFactor;
+            transform.localEulerAngles = rotation;
         }
+    }
+
+    
+    // Rotate player model to crosshair
+    private void RotateToCrosshair()
+    {
+       if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
+           _pointTarget = hitInfo.point;
+       else
+           _pointTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+
+       _playerModel.transform.LookAt(_pointTarget);
     }
 
 

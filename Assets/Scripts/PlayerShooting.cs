@@ -9,8 +9,10 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float _shootRange;
     [SerializeField] private float _shootcooldown;
     [SerializeField] private float _shootRendertime;
+    [SerializeField] private Camera _Camera;
 
     private Transform _cameraTransform;
+    private float _cameraFOV;
     private LineRenderer _lineRenderer;
     private Vector3 _shootTarget;
     private float _currShootCooldown;
@@ -20,6 +22,7 @@ public class PlayerShooting : MonoBehaviour
     void Start()
     {
         _cameraTransform = GetComponentInChildren<Camera>().transform;
+        _Camera.fieldOfView = 60f;
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         _currShootCooldown = _shootcooldown;
         _currShootRenderTime = _shootRendertime;
@@ -27,13 +30,14 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
+        UpdateTarget();
+        UpdateShoot();
+        
         if (!Input.GetMouseButton(1))
-        {
-            UpdateTarget();
-            UpdateShoot();
-        }
+            _Camera.fieldOfView = 60f;
+        else
+            _Camera.fieldOfView = 30f;
     }
-
 
     private void UpdateTarget()
     {

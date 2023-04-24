@@ -12,20 +12,26 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxStrafeVelocity;
     [SerializeField] private float _maxFallVelocity;
     [SerializeField] private float _rotationVelocityFactor;
+    [SerializeField] private float _timerSlowFall;
 
     private CharacterController _controller;
     private Vector3 _acceleration;
     private Vector3 _velocity;
     private bool    _startJump;
     private float   _sinPI4;
+    private float   _fallValue;
+    private float   _timerSlowFallCurrent;
+    private Vector3 _pointTarget;
 
     void Start()
     {
-        _controller     = GetComponent<CharacterController>();
-        _acceleration   = Vector3.zero;
-        _velocity       = Vector3.zero;
-        _startJump      = false;
-        _sinPI4         = Mathf.Sin(Mathf.PI / 4);
+        _controller             = GetComponent<CharacterController>();
+        _acceleration           = Vector3.zero;
+        _velocity               = Vector3.zero;
+        _startJump              = false;
+        _sinPI4                 = Mathf.Sin(Mathf.PI / 4);
+        _fallValue              = _maxFallVelocity;
+        _timerSlowFallCurrent   = _timerSlowFall;
 
         HideCursor();
     }
@@ -37,9 +43,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        UpdateRotation();
+        if (Input.GetMouseButton(1))
+            UpdateRotation();
+        
         CheckForJump();
     }
+
 
     private void UpdateRotation()
     {
@@ -51,7 +60,23 @@ public class PlayerMovement : MonoBehaviour
     private void CheckForJump()
     {
         if (Input.GetButtonDown("Jump") && _controller.isGrounded)
+        {
+            _timerSlowFallCurrent   = _timerSlowFall;
             _startJump = true;
+        }
+        else 
+            SlowFalling();
+    }
+
+    //what i was thinking of "bullet jump"
+    private void SlowFalling(){
+        if (Input.GetMouseButton(1) && _timerSlowFallCurrent > 0f)
+        {
+            _timerSlowFallCurrent -= Time.deltaTime;
+            _maxFallVelocity = -1;
+        }
+        else
+            _maxFallVelocity = _fallValue;
     }
 
     void FixedUpdate()
@@ -70,6 +95,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateForwardAcceleration()
     {
+
+        //if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
+        //    _pointTarget = hitInfo.point;
+        //else
+        //    _pointTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+        //    _playerModel.transform.LookAt(_pointTarget);
+
         float forwardAxis = Input.GetAxis("Forward");
 
         if (forwardAxis > 0f)
