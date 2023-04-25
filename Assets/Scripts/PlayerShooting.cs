@@ -6,12 +6,14 @@ public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private Transform _weapon;
     [SerializeField] private Transform _barrelEnd;
+    [SerializeField] private Transform _orientation;
+    [SerializeField] private Transform _cameraTransform;
     [SerializeField] private float _shootRange;
     [SerializeField] private float _shootcooldown;
     [SerializeField] private float _shootRendertime;
     [SerializeField] private Camera _Camera;
 
-    private Transform _cameraTransform;
+    //private Transform _cameraTransform;
     private float _cameraFOV;
     private LineRenderer _lineRenderer;
     private Vector3 _shootTarget;
@@ -21,7 +23,6 @@ public class PlayerShooting : MonoBehaviour
 
     void Start()
     {
-        _cameraTransform = GetComponentInChildren<Camera>().transform;
         _Camera.fieldOfView = 60f;
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         _currShootCooldown = _shootcooldown;
@@ -47,6 +48,9 @@ public class PlayerShooting : MonoBehaviour
             _shootTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
 
         _weapon.transform.LookAt(_shootTarget);
+        
+        // Update Direction where to move
+        _orientation.transform.LookAt(_shootTarget);
     }
 
     private void UpdateShoot()

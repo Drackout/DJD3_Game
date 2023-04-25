@@ -37,6 +37,10 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
+    
+        // Camera follows player
+        transform.position = _playerModel.transform.position;
+
         UpdatePitch();
         UpdateYaw();
         UpdateZoom();
@@ -64,18 +68,15 @@ public class CameraControl : MonoBehaviour
     {
         _cameraBeforeAim = transform.localEulerAngles;
 
-        if (Input.GetMouseButton(1)) //1st was resetYaw
-        {
-            ////////////////////////////////////// not yet able to change the camera correctly
-            //ResetYaw();
+        if (Input.GetMouseButton(1))
             RotateToCrosshair();
-        }
-        else
-        {
+            //ResetYaw();
+
             Vector3 rotation = transform.localEulerAngles;
+
+            // Camera rotate around player
             rotation.y += Input.GetAxis("Mouse X") * _rotationVelocityFactor;
             transform.localEulerAngles = rotation;
-        }
     }
 
     
@@ -110,8 +111,6 @@ public class CameraControl : MonoBehaviour
         UpdateZoomAcceleration();
         UpdateZoomVelocity();
         UpdateZoomPosition();
-
-
     }
 
 

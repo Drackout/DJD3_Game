@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
             SlowFalling();
     }
 
-    //what i was thinking of "bullet jump"
+    // "Bullet jump" to self only, slows falling for X time
     private void SlowFalling(){
         if (Input.GetMouseButton(1) && _timerSlowFallCurrent > 0f)
         {
