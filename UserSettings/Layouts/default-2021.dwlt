@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 85
+  controlID: 94
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 86
+  controlID: 95
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 87
+  controlID: 96
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -356,8 +356,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 8e5a0000
-    m_LastClickedID: 23182
+    m_SelectedIDs: 7e5a0000
+    m_LastClickedID: 23166
     m_ExpandedIDs: 00000000705a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -514,23 +514,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: f6590000
-      m_LastClickedID: 23030
-      m_ExpandedIDs: 38fbfffffc590000
+      m_SelectedIDs: 325a0000
+      m_LastClickedID: 23090
+      m_ExpandedIDs: e2e8ffff38fbfffff6590000fc590000325a0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Player
+        m_OriginalName: Player
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 23036
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 5}
       m_SearchString: 
@@ -765,9 +765,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -2.0903523, y: -2.327911, z: 6.740711}
+    m_Target: {x: -1.9052655, y: -6.52945, z: 11.310807}
     speed: 2
-    m_Value: {x: -2.0903523, y: -2.327911, z: 6.740711}
+    m_Value: {x: -1.9052655, y: -6.52945, z: 11.310807}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -814,13 +814,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.36490637, y: -0.11932766, z: 0.04721948, w: 0.9221379}
+    m_Target: {x: 0.3169032, y: -0.09904728, z: 0.033298302, w: 0.9426629}
     speed: 2
-    m_Value: {x: 0.364913, y: -0.11932982, z: 0.047220338, w: 0.9221546}
+    m_Value: {x: 0.31690952, y: -0.099049255, z: 0.033298966, w: 0.9426817}
   m_Size:
-    m_Target: 9.879114
+    m_Target: 11.781027
     speed: 2
-    m_Value: 9.879114
+    m_Value: 11.781027
   m_Ortho:
     m_Target: 0
     speed: 2
