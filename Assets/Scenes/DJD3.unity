@@ -428,7 +428,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b834afafa01146f4388491f3a828d176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerModel: {fileID: 1374616121}
+  _player: {fileID: 1374616121}
+  _playerModel: {fileID: 1984306631}
   _occlusionPivot: {fileID: 1756902641}
   _rotationVelocityFactor: 1.5
   _maxPitchUpAngle: 60
@@ -1154,17 +1155,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a42bea842a5194b85eee36f747100c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _forwardAcceleration: 10
-  _backwardAcceleration: -10
-  _strafeAcceleration: 10
+  _model: {fileID: 1984306631}
+  _cameraTransform: {fileID: 963194228}
+  _forwardAcceleration: 20
+  _backwardAcceleration: -20
+  _strafeAcceleration: 20
   _gravityAcceleration: -15
   _jumpAcceleration: 500
-  _maxForwardVelocity: 4
-  _maxBackwardVelocity: -2
-  _maxStrafeVelocity: 3
+  _maxForwardVelocity: 10
+  _maxBackwardVelocity: -5
+  _maxStrafeVelocity: 10
   _maxFallVelocity: -20
   _rotationVelocityFactor: 2
   _timerSlowFall: 2
+  _cameraRange: 20
 --- !u!114 &1374616124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1181,10 +1185,10 @@ MonoBehaviour:
   _barrelEnd: {fileID: 50341078}
   _orientation: {fileID: 121112354}
   _cameraTransform: {fileID: 963194228}
+  _model: {fileID: 1984306631}
   _shootRange: 20
   _shootcooldown: 0.5
   _shootRendertime: 0.1
-  _Camera: {fileID: 963194227}
 --- !u!1 &1400622551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1683,7 +1687,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984306630}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

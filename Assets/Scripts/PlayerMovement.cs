@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private Transform _model;
+    [SerializeField] private Transform _cameraTransform;
     [SerializeField] private float _forwardAcceleration;
     [SerializeField] private float _backwardAcceleration;
     [SerializeField] private float _strafeAcceleration;
@@ -13,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxFallVelocity;
     [SerializeField] private float _rotationVelocityFactor;
     [SerializeField] private float _timerSlowFall;
+    [SerializeField] private float _cameraRange;
 
     private CharacterController _controller;
     private Vector3 _acceleration;
@@ -22,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     private float   _fallValue;
     private float   _timerSlowFallCurrent;
     private Vector3 _pointTarget;
+    private float   _rotationValue;
+    private Vector3 _lastRotation;
 
     void Start()
     {
@@ -43,18 +48,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(1))
-            UpdateRotation();
-        
+        UpdateRotation();
         CheckForJump();
     }
 
 
     private void UpdateRotation()
     {
+        if (Input.GetMouseButton(1))
+        {
         float rotation = Input.GetAxis("Mouse X") * _rotationVelocityFactor;
-
         transform.Rotate(0f, rotation, 0f);
+        }
     }
 
     private void CheckForJump()
@@ -68,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
             SlowFalling();
     }
 
-    // "Bullet jump" to self only, slows falling for X time
+    // "Bullet jump" to self only, slows falling for X seconds
     private void SlowFalling(){
         if (Input.GetMouseButton(1) && _timerSlowFallCurrent > 0f)
         {
@@ -96,20 +101,28 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateForwardAcceleration()
     {
 
-        //if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
-        //    _pointTarget = hitInfo.point;
-        //else
-        //    _pointTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
-        //    _playerModel.transform.LookAt(_pointTarget);
+        
+            //RotateModel(1);
 
         float forwardAxis = Input.GetAxis("Forward");
 
         if (forwardAxis > 0f)
+        {
+            CheckCrosshair();
+            RotateModel(1);
             _acceleration.z = _forwardAcceleration;
+        }
         else if (forwardAxis < 0f)
+        {
+            CheckCrosshair();
+            RotateModel(2);
             _acceleration.z = _backwardAcceleration;
+        }
         else
+        {
             _acceleration.z = 0f;
+        }
+
     }
 
     private void UpdateStrafeAcceleration()
@@ -117,11 +130,56 @@ public class PlayerMovement : MonoBehaviour
         float strafeAxis = Input.GetAxis("Strafe");
 
         if (strafeAxis > 0f)
+        {
+            CheckCrosshair();
+            RotateModel(3);
             _acceleration.x = _strafeAcceleration;
+        }
         else if (strafeAxis < 0f)
+        {            
+            CheckCrosshair();
+            RotateModel(4);
             _acceleration.x = -_strafeAcceleration;
+        }
         else
+        {
             _acceleration.x = 0f;
+        }
+    }
+
+    // The player faces the crosshair and keeps its position
+    private void CheckCrosshair()
+    {
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _cameraRange))
+            _pointTarget = hitInfo.point;
+        else
+            _pointTarget = _cameraTransform.position + (_cameraRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+
+            transform.LookAt(_pointTarget);
+            _model.transform.localEulerAngles = _lastRotation;
+    }
+
+    // The model rotates X angles of the current player direction
+    private void RotateModel(int direction)
+    {
+        float rotationAngle = 0f;
+
+        if (!Input.GetMouseButton(1))
+        {
+            if(direction == 1)
+                rotationAngle = 0f;
+            else if(direction == 2)
+                rotationAngle = 180f;
+            else if(direction == 3)
+                rotationAngle = 90f;
+            else if(direction == 4)
+                rotationAngle = 270f;    
+        }
+        else 
+            rotationAngle = 0f;
+            
+        _model.transform.localEulerAngles = new Vector3(0f, rotationAngle, 0f);
+        _lastRotation = _model.transform.localEulerAngles;
     }
 
     private void UpdateVerticalAcceleration()

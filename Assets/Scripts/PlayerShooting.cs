@@ -8,10 +8,10 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Transform _barrelEnd;
     [SerializeField] private Transform _orientation;
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _model;
     [SerializeField] private float _shootRange;
     [SerializeField] private float _shootcooldown;
     [SerializeField] private float _shootRendertime;
-    [SerializeField] private Camera _Camera;
 
     //private Transform _cameraTransform;
     private float _cameraFOV;
@@ -23,7 +23,6 @@ public class PlayerShooting : MonoBehaviour
 
     void Start()
     {
-        _Camera.fieldOfView = 60f;
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         _currShootCooldown = _shootcooldown;
         _currShootRenderTime = _shootRendertime;
@@ -34,10 +33,6 @@ public class PlayerShooting : MonoBehaviour
         UpdateTarget();
         UpdateShoot();
         
-        if (!Input.GetMouseButton(1))
-            _Camera.fieldOfView = 60f;
-        else
-            _Camera.fieldOfView = 30f;
     }
 
     private void UpdateTarget()
@@ -49,8 +44,6 @@ public class PlayerShooting : MonoBehaviour
 
         _weapon.transform.LookAt(_shootTarget);
         
-        // Update Direction where to move
-        _orientation.transform.LookAt(_shootTarget);
     }
 
     private void UpdateShoot()
@@ -63,6 +56,8 @@ public class PlayerShooting : MonoBehaviour
 
         if (_currShootCooldown == _shootcooldown && Input.GetMouseButtonDown(0))
         {
+            
+
             Shoot();
         }
     }
@@ -76,6 +71,14 @@ public class PlayerShooting : MonoBehaviour
         _lineRenderer.SetPosition(1, _shootTarget);
 
         _lineRenderer.enabled = true;
+
+        // Look where's being shot
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
+            _shootTarget = hitInfo.point;
+        else
+            _shootTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+
+            _model.transform.LookAt(_shootTarget);
     }
 
 

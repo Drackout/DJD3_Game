@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class CameraControl : MonoBehaviour
 {
+    [SerializeField] private Transform _player;
     [SerializeField] private Transform _playerModel;
     [SerializeField] private Transform _occlusionPivot;
     [SerializeField] private float _rotationVelocityFactor;
@@ -26,10 +27,12 @@ public class CameraControl : MonoBehaviour
     private Vector3 _deocclusionVector;
     private Vector3 _pointTarget;
     private Vector3 _cameraBeforeAim;
+    private Camera  _camera;
 
     void Start()
     {
         _cameraTransform = GetComponentInChildren<Camera>().transform;
+        _camera = GetComponentInChildren<Camera>();
         _zoomVelocity = 0f;
         _deocclusionVector = new Vector3(0, 0, _deocclusionBuffer);
         _zoomPosition = _cameraTransform.localPosition.z;
@@ -37,18 +40,31 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-    
         // Camera follows player
-        transform.position = _playerModel.transform.position;
+        transform.position = _player.transform.position;
 
+        AimingWeapon();
         UpdatePitch();
         UpdateYaw();
         UpdateZoom();
-
         PreventOcclusion();
     }
 
+    private void AimingWeapon()
+    {
+        if (!Input.GetMouseButton(1))
+        {
+            _camera.fieldOfView = 60f;
+            _rotationVelocityFactor = 1.5f;
+        }
+        else
+        {
+            RotateToCrosshair();
 
+            _camera.fieldOfView = 30f;
+            _rotationVelocityFactor = 0.5f;
+        }
+    }
 
     private void UpdatePitch()
     {
@@ -70,7 +86,7 @@ public class CameraControl : MonoBehaviour
 
         if (Input.GetMouseButton(1))
             RotateToCrosshair();
-            //ResetYaw();
+            // ResetYaw();
 
             Vector3 rotation = transform.localEulerAngles;
 
@@ -91,7 +107,7 @@ public class CameraControl : MonoBehaviour
        _playerModel.transform.LookAt(_pointTarget);
     }
 
-
+    // NOT USED
     private void ResetYaw()
     {
         Vector3 rotation = transform.localEulerAngles;
