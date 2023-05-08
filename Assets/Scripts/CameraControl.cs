@@ -84,7 +84,7 @@ public class CameraControl : MonoBehaviour
     {
         _cameraBeforeAim = transform.localEulerAngles;
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetButton("Camera"))
             RotateToCrosshair();
             // ResetYaw();
 
@@ -132,7 +132,7 @@ public class CameraControl : MonoBehaviour
 
     private void UpdateZoomAcceleration()
     {
-        _zoomAcceleration = Input.GetAxis("Mouse ScrollWheel") * _zoomAccelerationFactor;
+        _zoomAcceleration = Input.GetAxis("Zoom") * _zoomAccelerationFactor;
     }
 
     private void UpdateZoomVelocity()

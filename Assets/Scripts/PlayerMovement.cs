@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform _model;
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private UIManager _uiManager;
     [SerializeField] private float _forwardAcceleration;
     [SerializeField] private float _backwardAcceleration;
     [SerializeField] private float _strafeAcceleration;
@@ -16,8 +17,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _rotationVelocityFactor;
     [SerializeField] private float _timerSlowFall;
     [SerializeField] private float _cameraRange;
+    [SerializeField] private float  _sprintVelocityFactor;
+    [SerializeField] private int    _maxStamina;
+    [SerializeField] private int    _staminaRegenRate;
+    [SerializeField] private int    _jumpStaminaCost;
+    [SerializeField] private int    _sprintStaminaRate;
 
     private CharacterController _controller;
+    private float   _stamina;
     private Vector3 _acceleration;
     private Vector3 _velocity;
     private bool    _startJump;
@@ -27,16 +34,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _pointTarget;
     private float   _rotationValue;
     private Vector3 _lastRotation;
+    private bool    _sprint;
 
     void Start()
     {
         _controller             = GetComponent<CharacterController>();
+        _stamina                = _maxStamina;
         _acceleration           = Vector3.zero;
         _velocity               = Vector3.zero;
         _startJump              = false;
         _sinPI4                 = Mathf.Sin(Mathf.PI / 4);
         _fallValue              = _maxFallVelocity;
         _timerSlowFallCurrent   = _timerSlowFall;
+        _sprint                 = false;
 
         HideCursor();
     }
@@ -45,13 +55,37 @@ public class PlayerMovement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
+    
+    private void AddStamina(float amount)
+    {
+        _stamina = Mathf.Min(_stamina + amount, _maxStamina);
+
+        _uiManager.SetStaminaFill(_stamina / _maxStamina);
+    }
+
+    private void DecStamina(float amount)
+    {
+        _stamina = Mathf.Max(_stamina - amount, 0f);
+
+        _uiManager.SetStaminaFill(_stamina / _maxStamina);
+    }
 
     void Update()
     {
+        UpdateStamina();
         UpdateRotation();
         CheckForJump();
+        CheckForSprint();
     }
 
+    private void UpdateStamina()
+    {
+        if (_stamina == _maxStamina || !_controller.isGrounded)
+            return;
+
+        if (!_sprint || (Input.GetAxis("Forward") == 0f && Input.GetAxis("Strafe") == 0f))
+            AddStamina(_staminaRegenRate * Time.deltaTime);
+    }
 
     private void UpdateRotation()
     {
@@ -71,6 +105,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else 
             SlowFalling();
+    }
+
+    private void CheckForSprint()
+    {
+        _sprint = Input.GetButton("Sprint") && _controller.isGrounded && _stamina > 0f;
     }
 
     // "Bullet jump" to self only, slows falling for X seconds
@@ -100,8 +139,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateForwardAcceleration()
     {
-
-        
             //RotateModel(1);
 
         float forwardAxis = Input.GetAxis("Forward");
@@ -155,6 +192,8 @@ public class PlayerMovement : MonoBehaviour
         else
             _pointTarget = _cameraTransform.position + (_cameraRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
 
+            // transform.LookAt(_pointTarget);
+            // _model.transform.localEulerAngles = _lastRotation;
             transform.LookAt(_pointTarget);
             _model.transform.localEulerAngles = _lastRotation;
     }
@@ -207,6 +246,13 @@ public class PlayerMovement : MonoBehaviour
             _velocity.x = Mathf.Clamp(_velocity.x, -_maxStrafeVelocity, _maxStrafeVelocity);
         else
             _velocity.x = Mathf.Clamp(_velocity.x, -_maxStrafeVelocity * _sinPI4, _maxStrafeVelocity * _sinPI4);
+
+        if (_sprint && (_velocity.z != 0f || _velocity.x != 0f))
+        {
+            _velocity.z *= _sprintVelocityFactor;
+            _velocity.x *= _sprintVelocityFactor;
+            DecStamina(_sprintStaminaRate * Time.fixedDeltaTime);
+        }
 
         if (_controller.isGrounded && !_startJump)
             _velocity.y = -0.1f;
