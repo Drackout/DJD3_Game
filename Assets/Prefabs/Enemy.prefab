@@ -311,4 +311,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _timer: {fileID: 0}
+  _score: {fileID: 11400000, guid: 5c1df46f1fbb6e645ad9ced23906e633, type: 2}
+  _timer: {fileID: 11400000, guid: 24c12a9b6104c5240b73ca0a8fe268db, type: 2}

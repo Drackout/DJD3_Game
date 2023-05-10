@@ -8,12 +8,12 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private FloatGlobalValue _timer;
 
-    private TextMeshProUGUI textObject;
+    private TextMeshProUGUI _textObject;
 
     void Start()
     {
         _timer.SetValue(_timer.GetOriginalValue());
-        textObject = GetComponent<TextMeshProUGUI>();
+        _textObject = GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -27,7 +27,7 @@ public class Timer : MonoBehaviour
         float mins = (_timer.GetValue() % 3600f) / 60f;
         float secs = (_timer.GetValue() % 60f);
 
-        textObject.text = $"{(int)mins}:{(int)secs}";
+        _textObject.text = $"{(int)mins}:{(int)secs}";
 
         if (_timer.GetValue() <= 0f)
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

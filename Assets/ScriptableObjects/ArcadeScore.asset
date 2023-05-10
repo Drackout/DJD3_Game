@@ -9,15 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13bd721c827b9854eafc24aa93341a46, type: 3}
-  m_Name: MeleeEnemyData
+  m_Script: {fileID: 11500000, guid: c527d2892cd8ed14386c1175115d59cc, type: 3}
+  m_Name: ArcadeScore
   m_EditorClassIdentifier: 
-  maxHealth: 40
-  maxIdleTime: 10
-  sightingRange: 20
-  sightingAngle: 45
-  attackRange: 2
-  attackDamage: 20
-  attackCooldown: 2
-  hurtCooldown: 1
-  scorePoints: 50
+  value: 0

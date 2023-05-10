@@ -20,3 +20,4 @@ MonoBehaviour:
   attackDamage: 10
   attackCooldown: 1
   hurtCooldown: 0.3
+  scorePoints: 55

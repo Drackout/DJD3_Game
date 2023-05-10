@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 ////// CREATE ANOTHER SCRIPT FOR THE GUN BASED ON THIS ONE pew pew
 
@@ -9,6 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Player         _player;
     [SerializeField] private EnemyType      _type;
     [SerializeField] private Transform[]    _waypoints;
+    [SerializeField] private IntGlobalValue _score;
     
     // Using timer for now (change to drop pickup later)
     [SerializeField] private FloatGlobalValue _timer;
@@ -27,10 +29,11 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        _agent          = GetComponent<NavMeshAgent>();
-        _animator       = GetComponent<Animator>();
-        _health         = _data.maxHealth;
-        _nextWaypoint   = 0;
+        _agent              = GetComponent<NavMeshAgent>();
+        _animator           = GetComponent<Animator>();
+        _health             = _data.maxHealth;
+        _nextWaypoint       = 0;
+        _score.SetValue(0);
 
         if(_type != EnemyType.Chaser)
             StartIdling();
@@ -92,7 +95,8 @@ public class Enemy : MonoBehaviour
         _animator.SetTrigger("Die");
 
         // Add 10 secs
-        _timer.ChangeValue(10f);
+        AddTime(10f);
+        AddScore(_data.scorePoints);
     }
 
     void Update()
@@ -227,5 +231,17 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
+    private void AddScore(int addScore)
+    {
+        _score.ChangeValue(addScore);
+    }
+    
+    private void AddTime(float addTime)
+    {
+        _timer.ChangeValue(addTime);
+    }
+    
+
 
 }
