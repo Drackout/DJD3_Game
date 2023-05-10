@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+////// CREATE ANOTHER SCRIPT FOR THE GUN BASED ON THIS ONE pew pew
+
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyData      _data;
     [SerializeField] private Player         _player;
+    [SerializeField] private EnemyType      _type;
     [SerializeField] private Transform[]    _waypoints;
+    
+    // Using timer for now (change to drop pickup later)
+    [SerializeField] private FloatGlobalValue _timer;
 
     private enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
+    private enum EnemyType {Patroller, Guard, Chaser};
 
     private NavMeshAgent    _agent;
     private Animator        _animator;
@@ -25,7 +32,10 @@ public class Enemy : MonoBehaviour
         _health         = _data.maxHealth;
         _nextWaypoint   = 0;
 
-        StartIdling();
+        if(_type != EnemyType.Chaser)
+            StartIdling();
+        else
+            StartChasing();
     }
 
     private void StartIdling()
@@ -80,6 +90,9 @@ public class Enemy : MonoBehaviour
         _agent.isStopped = true;
 
         _animator.SetTrigger("Die");
+
+        // Add 10 secs
+        _timer.ChangeValue(10f);
     }
 
     void Update()
@@ -112,6 +125,7 @@ public class Enemy : MonoBehaviour
         {
             _remainingIdleTime -= Time.deltaTime;
 
+            // Makes GUARD go back after chase
             if (_remainingIdleTime <= 0f)
             {
                 _nextWaypoint = (_nextWaypoint + 1) % _waypoints.Length;
@@ -130,6 +144,7 @@ public class Enemy : MonoBehaviour
 
     private void UpdateChase()
     {
+        
         if (IsPlayerOnSight())
         {
             if (IsPlayerOnAttackRange())
@@ -137,7 +152,9 @@ public class Enemy : MonoBehaviour
             else
                 _agent.SetDestination(_player.transform.position);
         }
-        else if (_agent.remainingDistance == 0f)
+        else if (_type == EnemyType.Chaser)
+            StartChasing();
+        else if(_agent.remainingDistance == 0f)
             StartIdling();
     }
 
@@ -147,9 +164,9 @@ public class Enemy : MonoBehaviour
 
         if (_curAttackCooldown <= 0f)
         {
-            if (IsPlayerOnSight())
+            if (IsPlayerOnSight() || _type == EnemyType.Chaser)
             {
-                if (IsPlayerOnAttackRange())
+                if (IsPlayerOnAttackRange()) 
                     Attack();
                 else
                     StartChasing();
@@ -204,7 +221,10 @@ public class Enemy : MonoBehaviour
             if (_health > 0)
                 StartHurting();
             else
-                Die();
+            {
+                if (_state != State.Dead)
+                    Die();
+            }
         }
     }
 

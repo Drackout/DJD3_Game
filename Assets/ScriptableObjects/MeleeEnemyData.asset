@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13bd721c827b9854eafc24aa93341a46, type: 3}
-  m_Name: EnemyData
+  m_Name: MeleeEnemyData
   m_EditorClassIdentifier: 
+  enemyType: Patroller
+  gun: 0
   maxHealth: 100
   maxIdleTime: 10
-  sightingRange: 0
+  sightingRange: 20
   sightingAngle: 45
   attackRange: 2
   attackDamage: 20
