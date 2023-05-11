@@ -30,6 +30,6 @@ public class Timer : MonoBehaviour
         _textObject.text = $"{(int)mins}:{(int)secs}";
 
         if (_timer.GetValue() <= 0f)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(0);
     }
 }

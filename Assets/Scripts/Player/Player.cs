@@ -20,7 +20,10 @@ public class Player : MonoBehaviour
         _uiManager.SetHealthFill((float)_health / _maxHealth);
 
         if (_health == 0)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene(0);
+        }
     }
 
 }
