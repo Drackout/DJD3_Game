@@ -98,8 +98,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckForJump()
     {
-        if (Input.GetButtonDown("Jump") && _controller.isGrounded)
+        if (Input.GetButtonDown("Jump") && _controller.isGrounded && _stamina >= _jumpStaminaCost)
         {
+            DecStamina(_jumpStaminaCost);
             _timerSlowFallCurrent   = _timerSlowFall;
             _startJump = true;
         }

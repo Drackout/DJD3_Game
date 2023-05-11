@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyType      _type;
     [SerializeField] private Transform[]    _waypoints;
     [SerializeField] private IntGlobalValue _score;
+    [SerializeField] private IntGlobalValue _currentEnemies;
     
     // Using timer for now (change to drop pickup later)
     [SerializeField] private FloatGlobalValue _timer;
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour
         _animator           = GetComponent<Animator>();
         _health             = _data.maxHealth;
         _nextWaypoint       = 0;
-        _score.SetValue(0);
+        //_score.SetValue(0);
 
         if(_type != EnemyType.Chaser)
             StartIdling();
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
     {
         _state = State.Patrolling;
 
-        _agent.SetDestination(_waypoints[_nextWaypoint].position);
+        _agent.SetDestination(_waypoints[Random.Range(0, _waypoints.Length)].position);
         _agent.isStopped = false;
     }
 
@@ -95,8 +96,9 @@ public class Enemy : MonoBehaviour
         _animator.SetTrigger("Die");
 
         // Add 10 secs
-        AddTime(10f);
+        AddTime(3f);
         AddScore(_data.scorePoints);
+        _currentEnemies.ChangeValue(-1);
     }
 
     void Update()
@@ -129,7 +131,7 @@ public class Enemy : MonoBehaviour
         {
             _remainingIdleTime -= Time.deltaTime;
 
-            // Makes GUARD go back after chase
+            // Makes the GUARD go back after chase
             if (_remainingIdleTime <= 0f)
             {
                 _nextWaypoint = (_nextWaypoint + 1) % _waypoints.Length;

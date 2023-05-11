@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Score : MonoBehaviour
+public class MenuShowScore : MonoBehaviour
 {
     [SerializeField] private IntGlobalValue _score;
-
+    
     private TextMeshProUGUI _textObject;
-
+    
     void Start()
     {
-        _score.SetValue(0);
         _textObject = GetComponent<TextMeshProUGUI>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        _textObject.text = _score.GetValue().ToString();
-        
+        if (_score.GetValue() != 0)
+        {
+            _textObject.text = $"Last Score: {_score.GetValue().ToString()}";
+        }
     }
 }

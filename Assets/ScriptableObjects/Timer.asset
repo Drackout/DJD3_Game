@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Timer
   m_EditorClassIdentifier: 
   _originalValue: 120
-  _value: 5
+  _value: 114.25377

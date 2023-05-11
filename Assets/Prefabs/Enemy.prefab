@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f01e130f311aa034f96a8a88b0c9eae2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -178,7 +178,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 77e16ce388d19c14cbf4d465aa7b727e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -312,4 +312,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _score: {fileID: 11400000, guid: 5c1df46f1fbb6e645ad9ced23906e633, type: 2}
+  _currentEnemies: {fileID: 0}
   _timer: {fileID: 11400000, guid: 24c12a9b6104c5240b73ca0a8fe268db, type: 2}
