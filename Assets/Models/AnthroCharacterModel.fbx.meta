@@ -2,7 +2,13 @@ fileFormatVersion: 2
 guid: 792c3dd0af3f6884c97a8656478a9535
 ModelImporter:
   serializedVersion: 21300
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -6765269814306024086
+    second: Sphere.004|ArmatureAction.003
+  - first:
+      74: -7567737417057399338
+    second: Sphere.003|ArmatureAction.003
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -88,7 +94,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.003
+    globalScale: 0.3
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
