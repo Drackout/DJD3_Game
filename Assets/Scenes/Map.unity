@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 375bcdaf10d76ee4aa213f17cf57e13c, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: e84e3af6de610c640bbdc85e6a4b05fa, type: 2}
 --- !u!1 &7960232
 GameObject:
   m_ObjectHideFlags: 0
@@ -4009,7 +4009,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 636f980ea51b25a49adb03b21e9c7b75, type: 2}
+  - {fileID: 2100000, guid: f01e130f311aa034f96a8a88b0c9eae2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4269,7 +4269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1071341893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7535,7 +7535,7 @@ PrefabInstance:
     - target: {fileID: 4564198179520721928, guid: ca3be5370340ef048b1ae82a0b83f343, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 5598b58152abde04fb3b24a626d60c28, type: 2}
+      objectReference: {fileID: 2100000, guid: 77e16ce388d19c14cbf4d465aa7b727e, type: 2}
     - target: {fileID: 4564198179769666041, guid: ca3be5370340ef048b1ae82a0b83f343, type: 3}
       propertyPath: m_Name
       value: Enemy (1)

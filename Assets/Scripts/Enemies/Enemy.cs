@@ -6,15 +6,15 @@ using TMPro;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private EnemyData      _data;
-    [SerializeField] private Player         _player;
-    [SerializeField] private EnemyType      _type;
-    [SerializeField] private Transform[]    _waypoints;
-    [SerializeField] private IntGlobalValue _score;
-    [SerializeField] private IntGlobalValue _currentEnemies;
+    [SerializeField] private EnemyData          _data;
+    [SerializeField] private Player             _player;
+    [SerializeField] private EnemyType          _type;
+    [SerializeField] private Transform[]        _waypoints;
+    [SerializeField] private Score              _score;
+    [SerializeField] private IntGlobalValue     _currentEnemies;
     
     // Using timer for now (change to drop pickup later)
-    [SerializeField] private FloatGlobalValue _timer;
+    [SerializeField] private Timer _timer;
 
     private enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
     private enum EnemyType {Patroller, Guard, Chaser};
@@ -34,7 +34,6 @@ public class Enemy : MonoBehaviour
         _animator           = GetComponent<Animator>();
         _health             = _data.maxHealth;
         _nextWaypoint       = 0;
-        //_score.SetValue(0);
 
         if(_type != EnemyType.Chaser)
             StartIdling();
@@ -44,6 +43,9 @@ public class Enemy : MonoBehaviour
 
     private void StartIdling()
     {
+        //_animator.SetTrigger("Idle");
+        _animator.SetBool("Walk", false);
+
         _state = State.Idling;
 
         _agent.isStopped = true;
@@ -53,6 +55,8 @@ public class Enemy : MonoBehaviour
 
     private void StartPatrolling()
     {
+        //_animator.SetTrigger("Walk");
+        _animator.SetBool("Walk", true);
         _state = State.Patrolling;
 
         _agent.SetDestination(_waypoints[Random.Range(0, _waypoints.Length)].position);
@@ -60,7 +64,8 @@ public class Enemy : MonoBehaviour
     }
 
     private void StartChasing()
-    {
+    {        
+        _animator.SetBool("Walk", true);
         _state = State.Chasing;
 
         _agent.SetDestination(_player.transform.position);
@@ -69,6 +74,8 @@ public class Enemy : MonoBehaviour
 
     private void StartAttacking()
     {
+        _animator.SetBool("Walk", false);
+
         _state = State.Attacking;
 
         _agent.isStopped = true;
@@ -78,6 +85,8 @@ public class Enemy : MonoBehaviour
 
     private void StartHurting()
     {
+        _animator.SetBool("Walk", false);
+
         _state = State.Hurting;
 
         _agent.isStopped = true;
@@ -85,17 +94,20 @@ public class Enemy : MonoBehaviour
         _animator.SetTrigger("Hurt");
 
         _curHurtCooldown = _data.hurtCooldown;
+        
     }
 
     private void Die()
     {
+        _animator.SetBool("Walk", false);
         _state = State.Dead;
 
         _agent.isStopped = true;
 
         _animator.SetTrigger("Die");
+        // Lift a bit for the animation to work correctly
 
-        // Add 10 secs
+        // Score stuff
         AddTime(3f);
         AddScore(_data.scorePoints);
         _currentEnemies.ChangeValue(-1);
@@ -126,7 +138,10 @@ public class Enemy : MonoBehaviour
     private void UpdateIdle()
     {
         if (IsPlayerOnSight())
+        {
+            
             StartChasing();
+        }
         else
         {
             _remainingIdleTime -= Time.deltaTime;
@@ -145,7 +160,9 @@ public class Enemy : MonoBehaviour
         if (IsPlayerOnSight())
             StartChasing();
         else if (_agent.remainingDistance == 0f)
+        {
             StartIdling();
+        }
     }
 
     private void UpdateChase()
@@ -236,12 +253,12 @@ public class Enemy : MonoBehaviour
 
     private void AddScore(int addScore)
     {
-        _score.ChangeValue(addScore);
+        _score.ChangeScore(addScore);
     }
     
     private void AddTime(float addTime)
     {
-        _timer.ChangeValue(addTime);
+        _timer.changeTimer(addTime);
     }
     
 

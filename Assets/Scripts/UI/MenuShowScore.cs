@@ -4,21 +4,21 @@ using UnityEngine;
 using TMPro;
 
 public class MenuShowScore : MonoBehaviour
-{
-    [SerializeField] private IntGlobalValue _score;
-    
+{   
     private TextMeshProUGUI _textObject;
+    private int _score;
     
     void Start()
     {
+        _score = Score._score;
         _textObject = GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
-        if (_score.GetValue() != 0)
+        if (_score != 0)
         {
-            _textObject.text = $"Last Score: {_score.GetValue().ToString()}";
+            _textObject.text = $"Last Score: {_score.ToString()}";
         }
     }
 }

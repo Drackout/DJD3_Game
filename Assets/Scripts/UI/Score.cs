@@ -5,20 +5,31 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField] private IntGlobalValue _score;
-
+    // Static to be accessed in the Main Menu
+    public static int _score;
     private TextMeshProUGUI _textObject;
 
     void Start()
     {
-        _score.SetValue(0);
         _textObject = GetComponent<TextMeshProUGUI>();
+        _score = 0;
+        UpdateScoreText();
     }
 
-    // Update is called once per frame
-    void Update()
+    public int GetScore()
     {
-        _textObject.text = _score.GetValue().ToString();
-        
+        return _score;
     }
+
+    public void ChangeScore(int v)
+    {
+        _score += v;
+        UpdateScoreText();
+    }
+
+    public void UpdateScoreText()
+    {
+        _textObject.text = _score.ToString();
+    }
+
 }
