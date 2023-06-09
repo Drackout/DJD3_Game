@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -14,6 +18,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float      _shootRendertime;
     [SerializeField] private int        _shootDamage;
     [SerializeField] private float      _lookAtShotTimer;
+    [SerializeField] private GameObject[] _shootBloons;
 
     //private Transform _cameraTransform;
     private float           _cameraFOV;
@@ -23,6 +28,7 @@ public class PlayerShooting : MonoBehaviour
     private float           _currShootCooldown;
     private float           _currShootRenderTime;
     private float           _currLookAtTimer;
+    private int             _bloonSelected;
 
 
     void Start()
@@ -31,7 +37,9 @@ public class PlayerShooting : MonoBehaviour
         _currShootCooldown      = _shootCooldown;
         _currShootRenderTime    = _shootRendertime;
         _currLookAtTimer        = _lookAtShotTimer;
-        
+        _bloonSelected          = 0;
+
+
     }
 
     void Update()
@@ -93,6 +101,12 @@ public class PlayerShooting : MonoBehaviour
         _lineRenderer.SetPosition(1, _shootTargetPoint);
 
         _lineRenderer.enabled = true;
+
+        // bloonSelected = Random.Range(0, _shootBloons.Length);
+
+        _bloonSelected = (_bloonSelected + 1) % _shootBloons.Length;
+
+        _shootBloons[_bloonSelected].SetActive(true);
 
 
         if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))

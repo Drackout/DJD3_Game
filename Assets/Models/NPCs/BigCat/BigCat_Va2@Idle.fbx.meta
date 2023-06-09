@@ -3,7 +3,22 @@ guid: f6e5fea4234702543b84cfd9a368a2cc
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body_lambert
+    second: {fileID: 2100000, guid: b9016aac2ea9fb9459bb14f31d4cf9dd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tail_lambert
+    second: {fileID: 2100000, guid: 01b12c5d6a9ab844e817deb5a7164fa8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: accessories_phong
+    second: {fileID: 2100000, guid: e80cb9e871bb5e840aafccc185493806, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
