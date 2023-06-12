@@ -8,17 +8,19 @@ using UnityEngine.UI;
 
 public class PlayerShooting : MonoBehaviour
 {
-    [SerializeField] private UIManager  _uiManager;
-    [SerializeField] private Transform  _weapon;
-    [SerializeField] private Transform  _barrelEnd;
-    [SerializeField] private Transform  _cameraTransform;
-    [SerializeField] private Transform  _model;
-    [SerializeField] private float      _shootRange;
-    [SerializeField] private float      _shootCooldown;
-    [SerializeField] private float      _shootRendertime;
-    [SerializeField] private int        _shootDamage;
-    [SerializeField] private float      _lookAtShotTimer;
-    [SerializeField] private GameObject[] _shootBloons;
+    [SerializeField] private UIManager      _uiManager;
+    [SerializeField] private Transform      _weapon;
+    [SerializeField] private Transform      _barrelEnd;
+    [SerializeField] private Transform      _cameraTransform;
+    [SerializeField] private Transform      _model;
+    [SerializeField] private float          _shootRange;
+    [SerializeField] private float          _shootCooldown;
+    [SerializeField] private float          _shootRendertime;
+    [SerializeField] private int            _shootDamage;
+    [SerializeField] private float          _lookAtShotTimer;
+
+    [SerializeField] private GameObject[]   _bloonSpawner;
+    [SerializeField] private GameObject[]   _shootBloons;
 
     //private Transform _cameraTransform;
     private float           _cameraFOV;
@@ -29,6 +31,7 @@ public class PlayerShooting : MonoBehaviour
     private float           _currShootRenderTime;
     private float           _currLookAtTimer;
     private int             _bloonSelected;
+    private Transform       _bloonSpawnerCurrentLocator;
 
 
     void Start()
@@ -102,11 +105,18 @@ public class PlayerShooting : MonoBehaviour
 
         _lineRenderer.enabled = true;
 
+
+        //_bloonSpawnerCurrentLocator = _bloonSpawner.transform;
+
+
+        Instantiate(_shootBloons[1], _bloonSpawner[1].transform.position, Quaternion.identity);
+
+
         // bloonSelected = Random.Range(0, _shootBloons.Length);
 
-        _bloonSelected = (_bloonSelected + 1) % _shootBloons.Length;
+        //        _bloonSelected = (_bloonSelected + 1) % _shootBloons.Length;
 
-        _shootBloons[_bloonSelected].SetActive(true);
+        //        _shootBloons[_bloonSelected].SetActive(true);
 
 
         if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
