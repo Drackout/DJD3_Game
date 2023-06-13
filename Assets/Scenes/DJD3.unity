@@ -2968,6 +2968,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: caa7e143427db5f4187a0b96d7dc6385, type: 2}
+    - target: {fileID: 6684295394808222897, guid: fa370b12cda5d3345b13df4ff84a5fbc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 62d314386cb129549a5f2a0397f6d657, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa370b12cda5d3345b13df4ff84a5fbc, type: 3}
 --- !u!1 &1131995646 stripped
@@ -3928,7 +3932,11 @@ MonoBehaviour:
   _shootRendertime: 0.1
   _shootDamage: 20
   _lookAtShotTimer: 1.5
-  _bloonSpawner: {fileID: 91296555}
+  _bloonSpawner:
+  - {fileID: 91296555}
+  - {fileID: 1933653653}
+  - {fileID: 75421374}
+  - {fileID: 185853026}
   _shootBloons:
   - {fileID: 406033540125838537, guid: 14543cd09947f104ebc251d838672668, type: 3}
   - {fileID: 4627191286644053245, guid: e87dca6b05775394c8a7c2f02f5cd10f, type: 3}

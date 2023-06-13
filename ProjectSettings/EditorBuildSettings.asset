@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 4534c184390cf144ba9073b612c6abcd
   - enabled: 1
-    path: Assets/Scenes/DJD3.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: ba1fdc6fac474514aa5d96deee8e05dc
+  - enabled: 1
+    path: Assets/Scenes/Map.unity
+    guid: b42412292d41884408acdbf7624d76b7
   m_configObjects: {}

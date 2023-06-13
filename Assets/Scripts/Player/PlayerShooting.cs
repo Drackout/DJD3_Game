@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerShooting : MonoBehaviour
 {
+    [SerializeField] private Player         _player;
     [SerializeField] private UIManager      _uiManager;
     [SerializeField] private Transform      _weapon;
     [SerializeField] private Transform      _barrelEnd;
@@ -97,6 +97,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
+        int randomPosition;
         _currShootCooldown = 0f;
         _currShootRenderTime = 0f;
 
@@ -109,7 +110,12 @@ public class PlayerShooting : MonoBehaviour
         //_bloonSpawnerCurrentLocator = _bloonSpawner.transform;
 
 
-        Instantiate(_shootBloons[1], _bloonSpawner[1].transform.position, Quaternion.identity);
+        _bloonSelected = (_bloonSelected + 1) % _shootBloons.Length;
+        randomPosition = Random.Range(0, _bloonSpawner.Length);
+
+        //transform.LookAt(_player.transform);
+
+        Instantiate(_shootBloons[_bloonSelected], _bloonSpawner[randomPosition].transform.position, Quaternion.identity);
 
 
         // bloonSelected = Random.Range(0, _shootBloons.Length);

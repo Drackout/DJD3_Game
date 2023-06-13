@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
 
     private NavMeshAgent    _agent;
     private Animator        _animator;
+    private Collider        _collider;
     private State           _state;
     private int             _health;
     private float           _remainingIdleTime;
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
     {
         _agent              = GetComponent<NavMeshAgent>();
         _animator           = GetComponent<Animator>();
+        _collider           =GetComponent<Collider>();
         _health             = _data.maxHealth;
         _nextWaypoint       = 0;
 
@@ -103,9 +105,10 @@ public class Enemy : MonoBehaviour
         _state = State.Dead;
 
         _agent.isStopped = true;
+        _collider.enabled = false;
 
         _animator.SetTrigger("Die");
-        // Lift a bit for the animation to work correctly
+        Destroy(gameObject, 10f);
 
         // Score stuff
         AddTime(3f);
