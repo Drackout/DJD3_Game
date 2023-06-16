@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform _model;
+    [SerializeField] private Transform _body;
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private float _forwardAcceleration;
@@ -146,14 +147,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (forwardAxis > 0f)
         {
-            CheckCrosshair();
-            RotateModel(1);
+            CheckCrosshair(1);
+            RotateModel(0f);
             _acceleration.z = _forwardAcceleration;
         }
         else if (forwardAxis < 0f)
         {
-            CheckCrosshair();
-            RotateModel(2);
+            CheckCrosshair(2);
+            RotateModel(180f);
             _acceleration.z = _backwardAcceleration;
         }
         else
@@ -169,14 +170,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (strafeAxis > 0f)
         {
-            CheckCrosshair();
-            RotateModel(3);
+            CheckCrosshair(3);
+            RotateModel(90f);
             _acceleration.x = _strafeAcceleration;
         }
         else if (strafeAxis < 0f)
         {            
-            CheckCrosshair();
-            RotateModel(4);
+            CheckCrosshair(4);
+            RotateModel(270f);
             _acceleration.x = -_strafeAcceleration;
         }
         else
@@ -186,40 +187,51 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // The player faces the crosshair and keeps its position
-    private void CheckCrosshair()
+    private void CheckCrosshair(int side)
     {
-        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _cameraRange))
-            _pointTarget = hitInfo.point;
-        else
+
+            // get the max distance
             _pointTarget = _cameraTransform.position + (_cameraRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
 
-            // transform.LookAt(_pointTarget);
-            // _model.transform.localEulerAngles = _lastRotation;
+            // always point to the max distance
             transform.LookAt(_pointTarget);
+
+        // Small fix for front and back.. not working that great, would require a better way to create all this
+        if (side == 1)
+        {
+            _model.transform.localEulerAngles = new Vector3(-transform.transform.localEulerAngles.x ,_model.rotation.y, _model.rotation.z);
+            _body.transform.localEulerAngles = new Vector3(_model.transform.localEulerAngles.x, 0f, 0f);
+        }
+        else if (side == 2)
+        {
+            _model.transform.localEulerAngles = new Vector3(-transform.transform.localEulerAngles.x ,_model.rotation.y, _model.rotation.z);
+            _body.transform.localEulerAngles = new Vector3(-_model.transform.localEulerAngles.x, 0f, 0f);
+        }
+        else
+        {
+            _pointTarget = _cameraTransform.position + (_cameraRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+            _body.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+        }
+        //
+
+
             _model.transform.localEulerAngles = _lastRotation;
     }
 
     // The model rotates X angles of the current player direction
-    private void RotateModel(int direction)
+    private void RotateModel(float angle)
     {
         float rotationAngle = 0f;
 
         if (!Input.GetMouseButton(1))
         {
-            if(direction == 1)
-                rotationAngle = 0f;
-            else if(direction == 2)
-                rotationAngle = 180f;
-            else if(direction == 3)
-                rotationAngle = 90f;
-            else if(direction == 4)
-                rotationAngle = 270f;    
+                rotationAngle = angle;    
         }
         else 
             rotationAngle = 0f;
             
         _model.transform.localEulerAngles = new Vector3(0f, rotationAngle, 0f);
-        _lastRotation = _model.transform.localEulerAngles;
+        //_lastRotation = _model.transform.localEulerAngles;
     }
 
     private void UpdateVerticalAcceleration()

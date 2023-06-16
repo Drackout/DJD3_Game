@@ -99,10 +99,7 @@ public class CameraControl : MonoBehaviour
     // Rotate player model to crosshair
     private void RotateToCrosshair()
     {
-       if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
-           _pointTarget = hitInfo.point;
-       else
-           _pointTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+        _pointTarget = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
 
        _playerModel.transform.LookAt(_pointTarget);
     }
