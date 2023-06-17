@@ -25,21 +25,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int    _sprintStaminaRate;
 
     private CharacterController _controller;
-    private float   _stamina;
-    private Vector3 _acceleration;
-    private Vector3 _velocity;
-    private bool    _startJump;
-    private float   _sinPI4;
-    private float   _fallValue;
-    private float   _timerSlowFallCurrent;
-    private Vector3 _pointTarget;
-    private float   _rotationValue;
-    private Vector3 _lastRotation;
-    private bool    _sprint;
+    private float               _stamina;
+    private Vector3             _acceleration;
+    private Vector3             _velocity;
+    private bool                _startJump;
+    private float               _sinPI4;
+    private float               _fallValue;
+    private float               _timerSlowFallCurrent;
+    private Vector3             _pointTarget;
+    private float               _rotationValue;
+    private Vector3             _lastRotation;
+    private bool                _sprint;
+    private Animator            _animator;
 
     void Start()
     {
         _controller             = GetComponent<CharacterController>();
+        _animator               = _body.GetComponent<Animator>();
         _stamina                = _maxStamina;
         _acceleration           = Vector3.zero;
         _velocity               = Vector3.zero;
@@ -101,6 +103,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && _controller.isGrounded && _stamina >= _jumpStaminaCost)
         {
+            _animator.SetBool("WalkForward", false);
+            _animator.SetTrigger("Jump");
             DecStamina(_jumpStaminaCost);
             _timerSlowFallCurrent   = _timerSlowFall;
             _startJump = true;
@@ -137,22 +141,26 @@ public class PlayerMovement : MonoBehaviour
         UpdateForwardAcceleration();
         UpdateStrafeAcceleration();
         UpdateVerticalAcceleration();
+        if (_acceleration.z == 0 && _acceleration.x == 0f)
+        {
+            _animator.SetBool("WalkForward", false);
+        }
     }
 
     private void UpdateForwardAcceleration()
     {
-            //RotateModel(1);
-
         float forwardAxis = Input.GetAxis("Forward");
 
         if (forwardAxis > 0f)
         {
+            _animator.SetBool("WalkForward", true);
             CheckCrosshair(1);
             RotateModel(0f);
             _acceleration.z = _forwardAcceleration;
         }
         else if (forwardAxis < 0f)
         {
+            _animator.SetBool("WalkForward", true);
             CheckCrosshair(2);
             RotateModel(180f);
             _acceleration.z = _backwardAcceleration;
@@ -170,12 +178,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (strafeAxis > 0f)
         {
+            _animator.SetBool("WalkForward", true);
             CheckCrosshair(3);
             RotateModel(90f);
             _acceleration.x = _strafeAcceleration;
         }
         else if (strafeAxis < 0f)
-        {            
+        {           
+            _animator.SetBool("WalkForward", true);
             CheckCrosshair(4);
             RotateModel(270f);
             _acceleration.x = -_strafeAcceleration;
@@ -237,7 +247,9 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateVerticalAcceleration()
     {
         if (_startJump)
+        {
             _acceleration.y = _jumpAcceleration;
+        }
         else
             _acceleration.y = _gravityAcceleration;
     }

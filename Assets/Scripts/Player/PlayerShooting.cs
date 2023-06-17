@@ -32,11 +32,13 @@ public class PlayerShooting : MonoBehaviour
     private float           _currLookAtTimer;
     private int             _bloonSelected;
     private Transform       _bloonSpawnerCurrentLocator;
+    private ParticleSystem  _particleSystem;
 
 
     void Start()
     {
-        _lineRenderer = GetComponentInChildren<LineRenderer>();
+        _lineRenderer           = GetComponentInChildren<LineRenderer>();
+        _particleSystem         = _barrelEnd.GetComponent<ParticleSystem>();
         _currShootCooldown      = _shootCooldown;
         _currShootRenderTime    = _shootRendertime;
         _currLookAtTimer        = _lookAtShotTimer;
@@ -97,6 +99,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
+        _particleSystem.Emit(5);
         int randomPosition;
         _currShootCooldown = 0f;
         _currShootRenderTime = 0f;
