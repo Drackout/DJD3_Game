@@ -41,7 +41,6 @@ public class HourglassSpawner : MonoBehaviour
         if (_spawned == false)
         {
             _currTimeRespawn += Time.deltaTime;
-            print(_currTimeRespawn);
         }
     }
 

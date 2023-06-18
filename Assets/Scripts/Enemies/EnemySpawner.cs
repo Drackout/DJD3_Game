@@ -9,9 +9,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private IntGlobalValue _currentEnemies;
     [SerializeField] private int            _maxEnemySpawner;
     [SerializeField] private GameObject[]   _spawners;
+    [SerializeField] private GameObject[]    _parentSpawn;
 
-    private Vector3 _pos;
-    private float   _timer;
+    private Vector3         _pos;
+    private float           _timer;
+    private GameObject      _enemySpawned;
 
     void Start()
     {
@@ -45,9 +47,16 @@ public class EnemySpawner : MonoBehaviour
 
             // Select random enemy, spawns it in the spawner area
             Vector3 spawnPosition = new Vector3(Random.Range(_pos.x+(-_spawnerSize), _pos.x+(_spawnerSize)), 0, Random.Range(_pos.z+(-_spawnerSize), _pos.z+(_spawnerSize)));
-            GameObject chosenEnemy = _enemies[Random.Range(0, _enemies.Length)];
 
-            Instantiate(chosenEnemy, spawnPosition, Quaternion.identity);
+            int randomEnemy = Random.Range(0, _enemies.Length);
+            GameObject chosenEnemy = _enemies[randomEnemy];
+
+            _enemySpawned = Instantiate(chosenEnemy, spawnPosition, Quaternion.identity);
+
+            if (randomEnemy == 2)
+                _enemySpawned.transform.parent = _parentSpawn[1].transform;
+            else
+                _enemySpawned.transform.parent = _parentSpawn[0].transform;
 
             _currentEnemies.ChangeValue(1);
         }

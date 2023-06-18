@@ -31,6 +31,20 @@ public class Player : MonoBehaviour
         _uiManager.SetHealthFill((float)_health / _maxHealth);
     }
 
+    public void Heal()
+    {
+        _health = _maxHealth;
+        UpdateUI();
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("cheat_hp"))
+        {
+            Heal();
+        }
+    }
+
 
     [System.Serializable]
     public struct SaveData
@@ -53,4 +67,6 @@ public class Player : MonoBehaviour
 
         UpdateUI();
     }
+
+
 }

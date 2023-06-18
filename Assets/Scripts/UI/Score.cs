@@ -32,4 +32,24 @@ public class Score : MonoBehaviour
         _textObject.text = _score.ToString();
     }
 
+
+    [System.Serializable]
+    public struct SaveData
+    {
+        public int score;
+    }
+
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+        saveData.score = _score;
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        _score = saveData.score;
+        UpdateScoreText();
+    }
+
 }

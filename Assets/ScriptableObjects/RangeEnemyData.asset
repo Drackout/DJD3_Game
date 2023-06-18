@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHealth: 40
   maxIdleTime: 5
   sightingRange: 20
-  sightingAngle: 35
+  sightingAngle: 70
   attackRange: 10
   attackDamage: 10
   attackCooldown: 1

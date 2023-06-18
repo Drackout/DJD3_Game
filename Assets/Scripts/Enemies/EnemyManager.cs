@@ -4,7 +4,7 @@ public class EnemyManager : MonoBehaviour
 {
     private Enemy[] _enemies;
 
-    void Start()
+    void Update()
     {
         _enemies = new Enemy[transform.childCount];
 

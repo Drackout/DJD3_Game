@@ -14,14 +14,13 @@ public class NPC : MonoBehaviour
     // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
 
-    private enum State { Dance, Run, Dead, Hurting };
+    public enum State { Dance, Run, Dead, Hurting };
 
     private NavMeshAgent    _agent;
     private Animator        _animator;
     private Collider        _collider;
     private State           _state;
     private int             _health;
-    private float           _remainingIdleTime;
     private int             _nextWaypoint;
     private float           _curAttackCooldown;
     private float           _curHurtCooldown;
@@ -40,14 +39,8 @@ public class NPC : MonoBehaviour
 
     private void StartDance()
     {
-        //_animator.SetTrigger("Idle");
-        //_animator.SetBool("Dance", false);
-
         _state = State.Dance;
-
         _agent.isStopped = true;
-
-        _remainingIdleTime = Random.Range(0f, _data.maxIdleTime);
     }
 
     private void StartRun()
@@ -78,18 +71,17 @@ public class NPC : MonoBehaviour
 
     private void Die()
     {
-        //_animator.SetBool("Walk", false);
         _state = State.Dead;
 
         _agent.isStopped = true;
         _collider.enabled = false;
 
-        //_animator.SetTrigger("Dead");
         _animator.Play("Falling Forward Death");
-        Destroy(gameObject, 10f);
-        // Lift a bit for the animation to work correctly
 
-        // Score stuff
+
+        //Cant destroy because of load
+        //Destroy(gameObject, 10f);
+
         AddTime(-5f);
         AddScore(_data.scorePoints);
     }
@@ -98,9 +90,6 @@ public class NPC : MonoBehaviour
     {
         switch (_state)
         {
-            case State.Dance:
-                UpdateDance();
-                break;
             case State.Run:
                 UpdateRun();
                 break;
@@ -110,25 +99,6 @@ public class NPC : MonoBehaviour
         }
     }
 
-    private void UpdateDance()
-    {
-        // if (IsPlayerOnSight())
-        // {
-        //     
-        //     // StartChasing();
-        // }
-        // else
-        // {
-        //     _remainingIdleTime -= Time.deltaTime;
-
-        //     // Makes the GUARD go back after chase
-        //     if (_remainingIdleTime <= 0f)
-        //     {
-        //         _nextWaypoint = (_nextWaypoint + 1) % _waypoints.Length;
-        //         StartRun();
-        //     }
-        // }
-    }
 
     private void UpdateRun()
     {
@@ -145,22 +115,6 @@ public class NPC : MonoBehaviour
         if (_curHurtCooldown <= 0f)
             StartRun();
     }
-
-
-    private bool IsPlayerOnSight()
-    {
-        if (Vector3.Distance(_player.transform.position, transform.position) > _data.sightingRange)
-            return false;
-
-        if (Vector3.Angle(_player.transform.position - transform.position, transform.forward) > _data.sightingAngle)
-            return false;
-
-        if (Physics.Linecast(transform.position, _player.transform.position, out RaycastHit hitInfo) && hitInfo.collider.transform != _player.transform)
-            return false;
-
-        return true;
-    }
-
     
     public void Damage(int amount)
     {
@@ -178,15 +132,6 @@ public class NPC : MonoBehaviour
         }
     }
 
-    // Insta death 1 shot
-    // public void Damage(int amount)
-    // {
-    //     
-    //     if (_state != State.Dead)
-    //         Die();
-    // }
-
-
     private void AddScore(int addScore)
     {
         _score.ChangeScore(addScore);
@@ -197,6 +142,63 @@ public class NPC : MonoBehaviour
         _timer.changeTimer(addTime);
     }
     
+    [System.Serializable]
+    public struct SaveData
+    {
+        public Vector3      position;
+        public Quaternion   rotation;
+        public State        state;
+        public int          health;
+        public int          nextWaypoint;
+        public float        curAttackCooldown;
+        public float        curHurtCooldown;
+        public bool         agentIsStopped;
+        public Vector3      agentDestination;
+        public Vector3      agentVelocity;
+        public int          animationState;
+        public float        animationTime;
+        public bool         collider;
+        //public bool         enabled;
+    }
 
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.position           = transform.position;
+        saveData.rotation           = transform.rotation;
+        saveData.state              = _state;
+        saveData.health             = _health;
+        saveData.nextWaypoint       = _nextWaypoint;
+        saveData.curAttackCooldown  = _curAttackCooldown;
+        saveData.curHurtCooldown    = _curHurtCooldown;
+        saveData.agentIsStopped     = _agent.isStopped;
+        saveData.agentDestination   = _agent.destination;
+        saveData.agentVelocity      = _agent.velocity;
+        saveData.animationState     = _animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        saveData.animationTime      = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        saveData.collider           = GetComponent<Collider>().enabled;
+        //saveData.enabled            = gameObject.active;
+        
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        transform.position  = saveData.position;
+        transform.rotation  = saveData.rotation;
+        _state              = saveData.state;
+        _health             = saveData.health;
+        _nextWaypoint       = saveData.nextWaypoint;
+        _curAttackCooldown  = saveData.curAttackCooldown;
+        _curHurtCooldown    = saveData.curHurtCooldown;
+        _agent.isStopped    = saveData.agentIsStopped;
+        _agent.destination  = saveData.agentDestination;
+        _agent.velocity     = saveData.agentVelocity;
+        _collider.enabled   = saveData.collider;
+        //gameObject.SetActive(saveData.enabled);
+
+        _animator.Play(saveData.animationState, 0, saveData.animationTime);
+    }
 
 }

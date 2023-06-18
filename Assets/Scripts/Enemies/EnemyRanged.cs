@@ -18,7 +18,7 @@ public class EnemyRanged : MonoBehaviour
     // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
 
-    private enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
+    public enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
     private enum EnemyType {Patroller, Guard, Chaser};
 
     private NavMeshAgent    _agent;
@@ -110,7 +110,9 @@ public class EnemyRanged : MonoBehaviour
         _collider.enabled = false;
 
         _animator.SetTrigger("Die");
-        Destroy(gameObject, 10f);
+        
+        //Cant destroy because of load
+        //Destroy(gameObject, 10f);
 
         // Score stuff
         AddTime(3f);
@@ -271,6 +273,63 @@ public class EnemyRanged : MonoBehaviour
         _timer.changeTimer(addTime);
     }
     
+    [System.Serializable]
+    public struct SaveData
+    {
+        public Vector3      position;
+        public Quaternion   rotation;
+        public State        state;
+        public int          health;
+        public float        remainingIdleTime;
+        public int          nextWaypoint;
+        public float        curAttackCooldown;
+        public float        curHurtCooldown;
+        public bool         agentIsStopped;
+        public Vector3      agentDestination;
+        public Vector3      agentVelocity;
+        public int          animationState;
+        public float        animationTime;
+        public bool         collider;
+    }
 
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.position           = transform.position;
+        saveData.rotation           = transform.rotation;
+        saveData.state              = _state;
+        saveData.health             = _health;
+        saveData.remainingIdleTime  = _remainingIdleTime;
+        saveData.nextWaypoint       = _nextWaypoint;
+        saveData.curAttackCooldown  = _curAttackCooldown;
+        saveData.curHurtCooldown    = _curHurtCooldown;
+        saveData.agentIsStopped     = _agent.isStopped;
+        saveData.agentDestination   = _agent.destination;
+        saveData.agentVelocity      = _agent.velocity;
+        saveData.animationState     = _animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        saveData.animationTime      = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        saveData.collider           = GetComponent<Collider>().enabled;
+        
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        transform.position  = saveData.position;
+        transform.rotation  = saveData.rotation;
+        _state              = saveData.state;
+        _health             = saveData.health;
+        _remainingIdleTime  = saveData.remainingIdleTime;
+        _nextWaypoint       = saveData.nextWaypoint;
+        _curAttackCooldown  = saveData.curAttackCooldown;
+        _curHurtCooldown    = saveData.curHurtCooldown;
+        _agent.isStopped    = saveData.agentIsStopped;
+        _agent.destination  = saveData.agentDestination;
+        _agent.velocity     = saveData.agentVelocity;
+        _collider.enabled   = saveData.collider;
+
+        _animator.Play(saveData.animationState, 0, saveData.animationTime);
+    }
 
 }

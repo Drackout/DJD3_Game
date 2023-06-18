@@ -106,7 +106,9 @@ public class Enemy : MonoBehaviour
         _collider.enabled = false;
 
         _animator.SetTrigger("Die");
-        Destroy(gameObject, 10f);
+
+        //Cant destroy because of load
+        //Destroy(gameObject, 10f);
 
         // Score stuff
         AddTime(3f);
@@ -278,6 +280,7 @@ public class Enemy : MonoBehaviour
         public Vector3      agentVelocity;
         public int          animationState;
         public float        animationTime;
+        public bool         collider;
     }
 
     public SaveData GetSaveData()
@@ -297,6 +300,7 @@ public class Enemy : MonoBehaviour
         saveData.agentVelocity      = _agent.velocity;
         saveData.animationState     = _animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
         saveData.animationTime      = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        saveData.collider           = GetComponent<Collider>().enabled;
         
         return saveData;
     }
@@ -314,6 +318,7 @@ public class Enemy : MonoBehaviour
         _agent.isStopped    = saveData.agentIsStopped;
         _agent.destination  = saveData.agentDestination;
         _agent.velocity     = saveData.agentVelocity;
+        _collider.enabled   = saveData.collider;
 
         _animator.Play(saveData.animationState, 0, saveData.animationTime);
     }
