@@ -207,4 +207,30 @@ public class CameraControl : MonoBehaviour
                 _cameraTransform.localPosition = localPosition;
         }
     }
+
+    [System.Serializable]
+    public struct SaveData
+    {
+        public Vector3      position;
+        public Quaternion   rotation;
+        public float        zoomPosition;
+    }
+
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.position       = _cameraTransform.localPosition;
+        saveData.rotation       = transform.rotation;
+        saveData.zoomPosition   = _zoomPosition;
+
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        _cameraTransform.localPosition  = saveData.position;
+        transform.rotation              = saveData.rotation;
+        _zoomPosition                   = saveData.zoomPosition;
+    }
 }

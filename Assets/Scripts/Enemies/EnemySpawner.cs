@@ -35,7 +35,6 @@ public class EnemySpawner : MonoBehaviour
         else if (_timer > 20)
             _maxEnemySpawner = 6;
 
-        print(_maxEnemySpawner);
 
         // Check max enemies
         if (_currentEnemies.GetValue() < _maxEnemySpawner)

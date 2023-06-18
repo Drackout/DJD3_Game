@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     {
         _health = Mathf.Max(_health - amount, 0);
 
-        _uiManager.SetHealthFill((float)_health / _maxHealth);
+        UpdateUI();
 
         if (_health == 0)
         {
@@ -26,4 +26,31 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void UpdateUI()
+    {
+        _uiManager.SetHealthFill((float)_health / _maxHealth);
+    }
+
+
+    [System.Serializable]
+    public struct SaveData
+    {
+        public int health;
+    }
+
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.health = _health;
+
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        _health = saveData.health;
+
+        UpdateUI();
+    }
 }

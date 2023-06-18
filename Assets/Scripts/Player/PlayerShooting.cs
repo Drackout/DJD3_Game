@@ -83,7 +83,8 @@ public class PlayerShooting : MonoBehaviour
             _lineRenderer.enabled = false;
 
         _currShootCooldown = Mathf.Min(_currShootCooldown + Time.deltaTime, _shootCooldown);
-        _uiManager.SetWeaponFill(_currShootCooldown / _shootCooldown);
+        UpdateUI();
+        
 
         if (_currShootCooldown == _shootCooldown && Input.GetButtonDown("Shoot"))
         { 
@@ -95,6 +96,11 @@ public class PlayerShooting : MonoBehaviour
             _uiManager.HideWeaponInfo();
         else
             _uiManager.ShowWeaponInfo();
+    }
+
+    private void UpdateUI()
+    {
+        _uiManager.SetWeaponFill(_currShootCooldown / _shootCooldown);
     }
 
     private void Shoot()
@@ -171,6 +177,28 @@ public class PlayerShooting : MonoBehaviour
             if (npc != null)
                 npc.Damage(_shootDamage);
         }
+    }
+
+    [System.Serializable]
+    public struct SaveData
+    {
+        public float curShootCooldown;
+    }
+
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.curShootCooldown = _currShootCooldown;
+
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        _currShootCooldown = saveData.curShootCooldown;
+
+        UpdateUI();
     }
 
 }

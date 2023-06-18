@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private float               _stamina;
     private Vector3             _acceleration;
     private Vector3             _velocity;
+    private bool                _isGrounded;
     private bool                _startJump;
     private float               _sinPI4;
     private float               _fallValue;
@@ -45,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         _stamina                = _maxStamina;
         _acceleration           = Vector3.zero;
         _velocity               = Vector3.zero;
+        _isGrounded             = false;
         _startJump              = false;
         _sinPI4                 = Mathf.Sin(Mathf.PI / 4);
         _fallValue              = _maxFallVelocity;
@@ -63,13 +65,18 @@ public class PlayerMovement : MonoBehaviour
     {
         _stamina = Mathf.Min(_stamina + amount, _maxStamina);
 
-        _uiManager.SetStaminaFill(_stamina / _maxStamina);
+        UpdateUI();
     }
 
     private void DecStamina(float amount)
     {
         _stamina = Mathf.Max(_stamina - amount, 0f);
 
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
         _uiManager.SetStaminaFill(_stamina / _maxStamina);
     }
 
@@ -83,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateStamina()
     {
-        if (_stamina == _maxStamina || !_controller.isGrounded)
+        if (_stamina == _maxStamina || !_isGrounded)
             return;
 
         if (!_sprint || (Input.GetAxis("Forward") == 0f && Input.GetAxis("Strafe") == 0f))
@@ -101,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckForJump()
     {
-        if (Input.GetButtonDown("Jump") && _controller.isGrounded && _stamina >= _jumpStaminaCost)
+        if (Input.GetButtonDown("Jump") && _isGrounded && _stamina >= _jumpStaminaCost)
         {
             _animator.SetBool("WalkForward", false);
             _animator.SetTrigger("Jump");
@@ -115,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckForSprint()
     {
-        _sprint = Input.GetButton("Sprint") && _controller.isGrounded && _stamina > 0f;
+        _sprint = Input.GetButton("Sprint") && _isGrounded && _stamina > 0f;
     }
 
     // "Bullet jump" to self only, slows falling for X seconds
@@ -279,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
             DecStamina(_sprintStaminaRate * Time.fixedDeltaTime);
         }
 
-        if (_controller.isGrounded && !_startJump)
+        if (_isGrounded && !_startJump)
             _velocity.y = -0.1f;
         else
             _velocity.y = Mathf.Max(_velocity.y, _maxFallVelocity);
@@ -294,5 +301,45 @@ public class PlayerMovement : MonoBehaviour
         motion = transform.TransformVector(motion);
 
         _controller.Move(motion);
+        
+        _isGrounded = _controller.isGrounded;
     }
+
+    [System.Serializable]
+    public struct SaveData
+    {
+        public Vector3      position;
+        public Quaternion   rotation;
+        public Vector3      velocity;
+        public float        stamina;
+    }
+
+    public SaveData GetSaveData()
+    {
+        SaveData saveData;
+
+        saveData.position   = transform.position;
+        saveData.rotation   = transform.rotation;
+        saveData.velocity   = _velocity;
+        saveData.stamina    = _stamina;
+
+        return saveData;
+    }
+
+    public void LoadSaveData(SaveData saveData)
+    {
+        _controller.enabled = false;
+
+        transform.position  = saveData.position;
+        transform.rotation  = saveData.rotation;
+        _velocity           = saveData.velocity;
+        _stamina            = saveData.stamina;
+        _isGrounded         = false;
+        _startJump          = false;
+
+        _controller.enabled = true;
+
+        UpdateUI();
+    }
+
 }
