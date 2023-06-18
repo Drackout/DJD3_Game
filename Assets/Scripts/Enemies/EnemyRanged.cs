@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class Enemy : MonoBehaviour
+public class EnemyRanged : MonoBehaviour
 {
     [SerializeField] private EnemyData          _data;
     [SerializeField] private Player             _player;
@@ -10,6 +10,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform[]        _waypoints;
     [SerializeField] private Score              _score;
     [SerializeField] private IntGlobalValue     _currentEnemies;
+    [SerializeField] private GameObject         _bullet;
+    [SerializeField] private Transform          _bulletSpawn;
+    [SerializeField] private float              _bulletSpeed;
+    
     
     // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
@@ -229,11 +233,16 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        _animator.SetTrigger("Attack");
+        
+            Vector3 playerDirection = _player.transform.position - _bulletSpawn.position;
+            
+            GameObject currentBullet = Instantiate(_bullet, _bulletSpawn.position, Quaternion.identity);
+            currentBullet.transform.forward = playerDirection.normalized;
+            currentBullet.GetComponent<Rigidbody>().AddForce(playerDirection.normalized * _bulletSpeed, ForceMode.Impulse);
 
-        _player.Damage(_data.attackDamage);
+            _animator.SetTrigger("Shoot");
 
-        _curAttackCooldown = _data.attackCooldown;
+            _curAttackCooldown = _data.attackCooldown;
     }
 
     public void Damage(int amount)

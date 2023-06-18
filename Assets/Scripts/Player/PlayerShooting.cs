@@ -61,12 +61,12 @@ public class PlayerShooting : MonoBehaviour
     {
         if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hitInfo, _shootRange))
         {
-            _shootTargetPoint = hitInfo.point;
+            _shootTargetPoint       = hitInfo.point;
             _shootTargetCollider    = hitInfo.collider;
         }
         else
         {
-            _shootTargetPoint = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
+            _shootTargetPoint       = _cameraTransform.position + (_shootRange - _cameraTransform.localPosition.z) * _cameraTransform.forward;
             _shootTargetCollider    = null;
         }
 
@@ -159,9 +159,17 @@ public class PlayerShooting : MonoBehaviour
         if (_shootTargetCollider != null)
         {
             Enemy enemy = _shootTargetCollider.GetComponentInParent<Enemy>();
+            EnemyRanged enemyRanged = _shootTargetCollider.GetComponentInParent<EnemyRanged>();
+            NPC npc     = _shootTargetCollider.GetComponentInParent<NPC>();
 
             if (enemy != null)
                 enemy.Damage(_shootDamage);
+
+            if (enemyRanged != null)
+                enemyRanged.Damage(_shootDamage);
+            
+            if (npc != null)
+                npc.Damage(_shootDamage);
         }
     }
 

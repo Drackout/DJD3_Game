@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13bd721c827b9854eafc24aa93341a46, type: 3}
-  m_Name: MeleeEnemyData
+  m_Name: RangeEnemyData
   m_EditorClassIdentifier: 
-  maxHealth: 60
+  maxHealth: 40
   maxIdleTime: 5
   sightingRange: 20
-  sightingAngle: 45
-  attackRange: 2
-  attackDamage: 20
-  attackCooldown: 2
-  hurtCooldown: 0.5
-  scorePoints: 50
+  sightingAngle: 35
+  attackRange: 10
+  attackDamage: 10
+  attackCooldown: 1
+  hurtCooldown: 0.3
+  scorePoints: 55

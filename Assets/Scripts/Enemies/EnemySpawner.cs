@@ -11,14 +11,32 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject[]   _spawners;
 
     private Vector3 _pos;
+    private float   _timer;
 
     void Start()
     {
         _currentEnemies.SetValue(0);
+        _timer = 0f;
     }
 
     void FixedUpdate()
     {
+        _timer += Time.deltaTime;
+
+        // Increase enemy spawn with the time passing (find a better way to do this)
+        if (_timer > 100)
+            _maxEnemySpawner = 10;
+        else if (_timer > 80)
+            _maxEnemySpawner = 9;
+        else if (_timer > 60)
+            _maxEnemySpawner = 8;
+        else if (_timer > 40)
+            _maxEnemySpawner = 7;
+        else if (_timer > 20)
+            _maxEnemySpawner = 6;
+
+        print(_maxEnemySpawner);
+
         // Check max enemies
         if (_currentEnemies.GetValue() < _maxEnemySpawner)
         {
