@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD;
 
 public class Hourglass : MonoBehaviour
 {    
@@ -12,6 +13,7 @@ public class Hourglass : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Get", transform.position);
             _timer.changeTimer(_timeToAdd);
             _hourglassSpawner.changeSpawnedState();
             Destroy(gameObject);

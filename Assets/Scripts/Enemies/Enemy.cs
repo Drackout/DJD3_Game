@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using FMOD;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Score              _score;
     [SerializeField] private IntGlobalValue     _currentEnemies;
     
-    // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
 
     public enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
@@ -109,6 +109,7 @@ public class Enemy : MonoBehaviour
 
         //Cant destroy because of load
         //Destroy(gameObject, 10f);
+		FMODUnity.RuntimeManager.PlayOneShot("event:/Ded", transform.position);
 
         // Score stuff
         AddTime(3f);
@@ -234,6 +235,8 @@ public class Enemy : MonoBehaviour
         _animator.SetTrigger("Attack");
 
         _player.Damage(_data.attackDamage);
+
+		FMODUnity.RuntimeManager.PlayOneShot("event:/melee", transform.position);
 
         _curAttackCooldown = _data.attackCooldown;
     }

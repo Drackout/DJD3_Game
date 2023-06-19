@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
-
-////// CREATE ANOTHER SCRIPT FOR THE GUN BASED ON THIS ONE pew pew
+using FMOD;
 
 public class NPC : MonoBehaviour
 {
@@ -11,7 +10,6 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform[]        _waypoints;
     [SerializeField] private Score              _score;
     
-    // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
 
     public enum State { Dance, Run, Dead, Hurting };
@@ -81,6 +79,7 @@ public class NPC : MonoBehaviour
 
         //Cant destroy because of load
         //Destroy(gameObject, 10f);
+		FMODUnity.RuntimeManager.PlayOneShot("event:/Ded", transform.position);
 
         AddTime(-5f);
         AddScore(_data.scorePoints);

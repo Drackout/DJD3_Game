@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using FMOD;
 
 public class EnemyRanged : MonoBehaviour
 {
@@ -14,8 +15,6 @@ public class EnemyRanged : MonoBehaviour
     [SerializeField] private Transform          _bulletSpawn;
     [SerializeField] private float              _bulletSpeed;
     
-    
-    // Using timer for now (change to drop pickup later)
     [SerializeField] private Timer _timer;
 
     public enum State { Idling, Patrolling, Chasing, Attacking, Hurting, Dead };
@@ -113,6 +112,7 @@ public class EnemyRanged : MonoBehaviour
         
         //Cant destroy because of load
         //Destroy(gameObject, 10f);
+		FMODUnity.RuntimeManager.PlayOneShot("event:/Ded", transform.position);
 
         // Score stuff
         AddTime(3f);
@@ -243,6 +243,7 @@ public class EnemyRanged : MonoBehaviour
             currentBullet.GetComponent<Rigidbody>().AddForce(playerDirection.normalized * _bulletSpeed, ForceMode.Impulse);
 
             _animator.SetTrigger("Shoot");
+		    FMODUnity.RuntimeManager.PlayOneShot("event:/Bang", transform.position);
 
             _curAttackCooldown = _data.attackCooldown;
     }

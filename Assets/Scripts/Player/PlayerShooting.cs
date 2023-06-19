@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using FMOD;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -116,6 +117,7 @@ public class PlayerShooting : MonoBehaviour
         _lineRenderer.enabled = true;
 
 
+		FMODUnity.RuntimeManager.PlayOneShot("event:/Shoot", transform.position);
         //_bloonSpawnerCurrentLocator = _bloonSpawner.transform;
 
 

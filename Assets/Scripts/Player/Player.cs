@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FMOD;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
     public void Damage(int amount)
     {
         _health = Mathf.Max(_health - amount, 0);
+		FMODUnity.RuntimeManager.PlayOneShot("event:/Hurt", transform.position);
 
         UpdateUI();
 
