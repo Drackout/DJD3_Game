@@ -1780,6 +1780,7 @@ MonoBehaviour:
   _spawners:
   - {fileID: 715766712}
   - {fileID: 186559459}
+  _parentSpawn: []
 --- !u!1 &771178245
 GameObject:
   m_ObjectHideFlags: 0
@@ -3891,6 +3892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 1984306631}
+  _body: {fileID: 0}
   _cameraTransform: {fileID: 963194228}
   _uiManager: {fileID: 54753655}
   _forwardAcceleration: 20
@@ -3922,6 +3924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820b0ade75c26854a949ecc0ddb7a2fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
   _uiManager: {fileID: 54753655}
   _weapon: {fileID: 1400622552}
   _barrelEnd: {fileID: 50341078}
@@ -3969,6 +3972,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pausedMenu: {fileID: 1414695351}
+  _camera: {fileID: 0}
+  _player: {fileID: 0}
 --- !u!1 &1400622551
 GameObject:
   m_ObjectHideFlags: 0
