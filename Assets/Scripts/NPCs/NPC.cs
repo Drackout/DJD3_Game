@@ -37,6 +37,7 @@ public class NPC : MonoBehaviour
 
     private void StartDance()
     {
+        _animator.Play("Salsa Dancing", 0 , Random.Range(0f, 2f));
         _state = State.Dance;
         _agent.isStopped = true;
     }

@@ -23,7 +23,10 @@ public class Score : MonoBehaviour
 
     public void ChangeScore(int v)
     {
-        _score += v;
+        if ((_score + v) <= 0)
+            _score = 0;
+        else
+            _score += v;
         UpdateScoreText();
     }
 
